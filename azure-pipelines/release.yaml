@@ -1,0 +1,24 @@
+trigger:
+- '*'
+
+pr:
+- '*'
+
+jobs:
+- job: 'Build'
+  steps:
+  - script: echo 'Building Docker image...'
+    displayName: 'Build Docker Image'
+    continueOnError: true
+
+- deployment: 'Deploy'
+  dependsOn: 'Build'
+  pool:
+    vmImage: 'ubuntu-latest'
+  environment: 'production'
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - script: echo 'Deploying Docker container...'
+          displayName: 'Deploy Docker Container'
